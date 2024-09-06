@@ -16,23 +16,23 @@ export const TableSettingCategories = () => {
           <TableColumn>NOMBRE</TableColumn>
           <TableColumn>ACCIÓN</TableColumn>
         </TableHeader>
-        <TableBody>
-          <TableRow key="1">
+        <TableBody >
+          <TableRow key="1" className="dark:text-textDark">
             <TableCell>Tony Reichert</TableCell>
             <TableCell>CEO</TableCell>
             <TableCell>Active</TableCell>
           </TableRow>
-          <TableRow key="2">
+          <TableRow key="2" className="dark:text-textDark">
             <TableCell>Zoey Lang</TableCell>
             <TableCell>Technical Lead</TableCell>
             <TableCell>Paused</TableCell>
           </TableRow>
-          <TableRow key="3">
+          <TableRow key="3" className="dark:text-textDark">
             <TableCell>Jane Fisher</TableCell>
             <TableCell>Senior Developer</TableCell>
             <TableCell>Active</TableCell>
           </TableRow>
-          <TableRow key="4">
+          <TableRow key="4" className="dark:text-textDark">
             <TableCell>William Howard</TableCell>
             <TableCell>Community Manager</TableCell>
             <TableCell>Vacation</TableCell>

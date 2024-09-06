@@ -21,11 +21,11 @@ const HomeCore = () => {
 
 
   return (
-    <div className="grid grid-cols-5  gap-4 divide-x-2 divide-gray-200 dark:divide-secondaryDark">
-      <div className="col-span-1">
+    <div className="grid lg:grid-cols-5  sm:grid-cols-1 gap-4 divide-x-2 divide-gray-200 dark:divide-secondaryDark">
+      <div className="lg:col-span-1 sm:col-span-full">
         <FormSearchCategory />
       </div>
-      <div className="col-span-4">
+      <div className="lg:col-span-4 sm:col-span-full">
         {data ? (
           <TemplateTableLayout
             title="Información de las contraseñas"

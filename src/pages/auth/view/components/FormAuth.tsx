@@ -62,7 +62,7 @@ export const FormAuth = () => {
   };
 
   return (
-    <form className="sm:w-2/3 w-full px-4 lg:px-0 mx-auto mt-10" onSubmit={handleSubmit(onSubmit)}>
+    <form className="sm:w-2/3 w-full  lg:px-0  mt-10" onSubmit={handleSubmit(onSubmit)}>
       <div className="flex -mx-3">
         <div className="w-full px-3 mb-5">
           <Controller
