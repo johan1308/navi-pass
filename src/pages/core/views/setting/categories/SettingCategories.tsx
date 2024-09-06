@@ -11,10 +11,10 @@ const SettingCategories = () => {
       <TemplateTableLayout
         title="Categorías"
         bottons={
-          <div className="space-x-4">
-            <ButtonAddCategories />
+          <div className="space-x-4 flex items-center">
+            <ButtonAddCategories/>
             <Button isIconOnly color="secondary" aria-label="Like">
-              <FiRefreshCw className="h-5 w-5" />
+              <FiRefreshCw className="h-4 w-4" />
             </Button>
           </div>
         }

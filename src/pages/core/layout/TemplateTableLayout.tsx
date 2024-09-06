@@ -57,12 +57,12 @@ export const TemplateTableLayout = ({
   return (
     <>
       <div className=" ">
+        <div className="p-4 border-b-1 dark:border-gray-800">{bottons}</div>
         <div className="col-span-full   p-4 h-full ">
           <div className="lg:flex lg:justify-between lg:items-center">
             <p className="font-semibold text-xl  mb-5 lg:mb-0 dark:text-white">
               {title}
             </p>
-            <div className="">{bottons}</div>
           </div>
 
           <div className="lg:flex lg:justify-between col-span-full mr-3 space-x-3 items-center">

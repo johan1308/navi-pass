@@ -30,7 +30,7 @@ const HomeCore = () => {
           <TemplateTableLayout
             title="Información de las contraseñas"
             bottons={
-              <div className="space-x-4">
+              <div className="space-x-4 flex items-center">
                 <ButtonAddPassword />
                 <Button isIconOnly color="secondary" aria-label="Like">
                   <FiRefreshCw className="h-4 w-4" />

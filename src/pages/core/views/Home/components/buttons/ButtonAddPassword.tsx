@@ -14,10 +14,10 @@ export const ButtonAddPassword = () => {
     <>
       <Button
         color="primary"
-        endContent={<HiPlusSm className="h-5 w-5" />}
+        startContent={<HiPlusSm className="h-5 w-5" />}
         onClick={() => setOpen(true)}
       >
-        Crear
+        CREAR
       </Button>
       <Transition.Root show={open} as={Fragment}>
         <Dialog as="div" className="relative z-10 " onClose={setOpen}>
