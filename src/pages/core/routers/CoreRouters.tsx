@@ -3,10 +3,9 @@ import { Navigate, Route, Routes } from "react-router-dom";
 
 import { SidebarCore } from "../components/SidebarCore";
 import { Loading } from "../../../components/Loading";
-import { Home} from "../data/ItemRouter";
-
-import { BreadCrumbCore } from "../components/BreadCrumb/BreadCrumbCore";
-
+import { Home, Setting } from "../data/ItemRouter";
+import { PassIDViews } from "../views/PassID/PassIDViews";
+import SettingCategories from "../views/setting/categories/SettingCategories";
 
 export const CoreRouters = () => {
   return (
@@ -23,9 +22,15 @@ export const CoreRouters = () => {
             {/* {getTitle} */}
             {/* <BreadCrumbCore /> */}
             <Routes>
-              <Route path="/" element={<Navigate to="home/" />} />
-              <Route path="home/" element={<Home />} />
-              <Route path="*" element={<Navigate to="/" />} />
+              <Route path="/" element={<Navigate to="password/" />} />
+              <Route path="password/" element={<Home />} />
+              <Route path="password/:id/update/" element={<PassIDViews />} />
+              <Route path="setting/" element={<Setting />}>
+                <Route index element={<Navigate to="/categories" />} />
+                <Route path="categories" element={<SettingCategories />} />
+                <Route path="*" element={<Navigate to="/categories" />} />
+              </Route>
+              <Route path="*" element={<Navigate to="/password" />} />
             </Routes>
           </>
         </Suspense>

@@ -93,7 +93,7 @@ export const TemplateTableLayout = ({
                     />
                   )}
                 />
-                <Button
+                {/* <Button
                   isIconOnly
                   color="default"
                   aria-label="Like"
@@ -102,7 +102,7 @@ export const TemplateTableLayout = ({
                   onClick={() => setOpen(true)}
                 >
                   <FaFilter className="h-6 w-6 text-white" />
-                </Button>
+                </Button> */}
               </form>
             )}
 

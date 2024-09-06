@@ -1,11 +1,12 @@
 import { useState, Fragment } from "react";
 import { Dialog, Transition } from "@headlessui/react";
-import { useThemeMovilPay } from "../../../../../hooks/useTheme";
-import { classNames } from "../../../../../helpers/ClassN";
+
 import { HiPlusSm, HiX } from "react-icons/hi";
 import { Button } from "@nextui-org/react";
-import { FormAddPass } from "./FormAddPass";
-export const ButtonAddPassword = () => {
+import { useThemeMovilPay } from "../../../../../../../hooks/useTheme";
+import { classNames } from "../../../../../../../helpers/ClassN";
+
+export const ButtonAddCategories = () => {
   const { darkMode } = useThemeMovilPay();
   const [open, setOpen] = useState(false);
   return (
@@ -78,7 +79,11 @@ export const ButtonAddPassword = () => {
                         </div>
                       </div>
                       <div className="relative flex-1 px-4 sm:px-6 divide-y-1 space-y-5">
-                        <FormAddPass/>
+                        Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                        Voluptates dolorem, repellendus odit enim eum ullam ut
+                        voluptate quia quod harum expedita officiis
+                        reprehenderit consectetur, explicabo quaerat doloribus
+                        molestias facere modi.
                       </div>
                     </div>
                   </Dialog.Panel>

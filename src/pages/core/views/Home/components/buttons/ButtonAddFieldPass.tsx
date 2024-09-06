@@ -5,13 +5,16 @@ import {
   PopoverTrigger,
   PopoverContent,
   Button,
+  Textarea,
 } from "@nextui-org/react";
 import { useEffect, useState } from "react";
 import { Controller, set, useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { getID } from "../../../../../libs/GetIDLibs";
-import { dataInput } from "./FormAddPass";
+import { getID } from "../../../../../../libs/GetIDLibs";
+import { dataInput } from "../FormAddPass";
+import { useThemeMovilPay } from "../../../../../../hooks/useTheme";
+import { classNames } from "../../../../../../helpers/ClassN";
 
 interface Props {
   send: (e: dataInput) => void;
@@ -20,19 +23,20 @@ interface Props {
 const schema = yup
   .object({
     title: yup.string().required("Debes introducir el titulo"),
+    value: yup.string().required("Debes introducir el titulo"),
   })
   .required();
 
 export const ButtonAddFieldPass = ({ send }: Props) => {
+  const {darkMode} =useThemeMovilPay()
   const {
     control,
     formState: { errors, isValid },
     getValues,
-    reset
+    reset,
   } = useForm({ resolver: yupResolver(schema) });
 
   const [isOpen, setIsOpen] = useState(false);
-
 
   // controlar el ESC para que no se cierre todo
   useEffect(() => {
@@ -53,40 +57,39 @@ export const ButtonAddFieldPass = ({ send }: Props) => {
     send({
       ...data,
       id,
-      value:''
     });
-    setIsOpen(false)
-    reset()
+    setIsOpen(false);
+    reset();
   };
 
   return (
     <>
-      <Popover placement="top" backdrop="opaque" isOpen={isOpen} onOpenChange={(open) => setIsOpen(open)}>
+      <Popover
+        placement="top"
+        backdrop="opaque"
+        isOpen={isOpen}
+        onOpenChange={(open) => setIsOpen(open)}
+      >
         <PopoverTrigger>
+          
           <button
             type="button"
-            className="group flex w-full items-center justify-between space-x-3 rounded-lg border-2 border-gray-300  border-dashed p-2 text-left shadow-sm hover:bg-gray-50 "
+            className={classNames(darkMode?'bg-primaryDark':'bg-white',"group -ml-1 flex items-center rounded-md  p-1 focus:outline-none focus:ring-2 ")} 
           >
-            <span className="flex min-w-0 flex-1 items-center space-x-3">
-              <span className="block flex-shrink-0"></span>
-              <span className="block min-w-0 flex-1">
-                <p className="block truncate  font-light text-gray-500">
-                  Agregar campo
-                </p>
-              </span>
+            <span className="flex h-8 w-8 items-center justify-center rounded-full border-2 border-dashed border-gray-300 text-gray-400">
+              <BiPlus aria-hidden="true" className="h-5 w-5" />
             </span>
-            <span className="inline-flex h-7 w-7 flex-shrink-0 items-center justify-center">
-              <BiPlus
-                aria-hidden="true"
-                className="h-5 w-5 text-gray-400 group-hover:text-gray-500"
-              />
+            <span className={classNames(darkMode?'text-titleDark':'text-primary group-hover:text-primary',"ml-4 text-sm font-medium ")}>
+              Agregar Información
             </span>
           </button>
         </PopoverTrigger>
         <PopoverContent className="w-[240px]">
           {(titleProps) => (
             <div className="px-1 py-2 w-full">
-              <p className="text-small font-bold text-foreground">Titulo</p>
+              <p className={classNames(darkMode?'text-titleDark':'',"text-small font-bold text-foreground")}>
+                Agregar valor
+              </p>
               <div className="mt-2 flex flex-col gap-2 w-full">
                 <Controller
                   control={control}
@@ -96,6 +99,26 @@ export const ButtonAddFieldPass = ({ send }: Props) => {
                       <Input
                         size="md"
                         variant="bordered"
+                        label="Titulo"
+                        placeholder="Introduce un titulo"
+                        onChange={onChange}
+                        onBlur={onBlur}
+                        isInvalid={!!errors.title}
+                        errorMessage={errors.title?.message}
+                        value={value}
+                      />
+                    </>
+                  )}
+                />
+                <Controller
+                  control={control}
+                  name="value"
+                  render={({ field: { onChange, onBlur, value } }) => (
+                    <>
+                      <Textarea
+                        size="md"
+                        variant="bordered"
+                        label="Valor"
                         placeholder="Introduce un titulo"
                         onChange={onChange}
                         onBlur={onBlur}
