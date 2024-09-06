@@ -62,7 +62,7 @@ export const FormAuth = () => {
   };
 
   return (
-    <form className="sm:w-2/3 w-full  lg:px-0  mt-10" onSubmit={handleSubmit(onSubmit)}>
+    <form className=" w-full  lg:px-0  mt-10 mx-auto" onSubmit={handleSubmit(onSubmit)}>
       <div className="flex -mx-3">
         <div className="w-full px-3 mb-5">
           <Controller
@@ -79,7 +79,7 @@ export const FormAuth = () => {
                 onChange={onChange}
                 isInvalid={!!errors.email}
                 errorMessage={errors.email?.message}
-                className="w-full dark:text-white text-default"
+                className="w-full text-gray-700"
                 maxLength={40}
                 placeholder="Introduce tu usuario"
               />
@@ -97,7 +97,7 @@ export const FormAuth = () => {
                 label="Contraseña"
                 color="primary"
                 variant="faded"
-                className="w-full dark:text-white text-default"
+                className="w-full text-gray-700"
                 placeholder="************"
                 value={value}
                 onBlur={onBlur}
