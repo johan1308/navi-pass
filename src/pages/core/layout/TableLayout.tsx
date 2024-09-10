@@ -6,6 +6,7 @@ import {
   TableRow,
   TableCell,
 } from "@nextui-org/react";
+import { Loading } from "../../../components/Loading";
 
 export type valueType = {
   name: string;
@@ -17,12 +18,19 @@ interface Props {
   data: any;
   Paginator?: React.ReactNode;
   isLoading: boolean;
+  emptyContent?: string | null;
 }
 
-export const TableLayout = ({ columns, data, Paginator, isLoading }: Props) => {
+export const TableLayout = ({
+  columns,
+  data,
+  Paginator,
+  isLoading,
+  emptyContent,
+}: Props) => {
   const setValueTableCell = (item: any) => {
     return (
-      <TableRow key={item.id}>
+      <TableRow key={item.id} className="animate-fade">
         {columns.map((resp: valueType, i) => (
           <TableCell
             className="my-4 dark:text-white"
@@ -57,11 +65,11 @@ export const TableLayout = ({ columns, data, Paginator, isLoading }: Props) => {
         loadingContent={
           <>
             <div className="bg-white dark:bg-primaryDark   dark:opacity-90 opacity-90 h-full w-full flex justify-center items-center">
-              {/* <Loading /> */}
+              <Loading />
             </div>
           </>
         }
-        emptyContent={"No hay pagos"}
+        emptyContent={emptyContent ?? "No hay datos"}
       >
         {(item: any) => setValueTableCell(item)}
       </TableBody>

@@ -6,6 +6,9 @@ import { Fragment, useState } from "react";
 import { Transition, Dialog } from "@headlessui/react";
 import { classNames } from "../../../../../../helpers/ClassN";
 import { HiX } from "react-icons/hi";
+import { useQuery } from "react-query";
+import { getCredentialsID } from "../../api/HomeAPi";
+import { Loading } from "../../../../../../components/Loading";
 
 interface Props {
   id: number;
@@ -13,13 +16,23 @@ interface Props {
 
 export const ButtonInfoPassword = ({ id }: Props) => {
   const navigation = useNavigate();
-
   const handleNavigate = () => {
     const url = `${id}/update/`;
     navigation(url);
   };
+
   const { darkMode } = useThemeMovilPay();
   const [open, setOpen] = useState(false);
+  const { isLoading } = useQuery(
+    ["credential", id],
+    () => getCredentialsID(id),
+    {
+      enabled: open,
+      onSuccess: (data) => {
+        console.log(data);
+      },
+    }
+  );
   return (
     <>
       <Tooltip content="Ver información">
@@ -93,168 +106,182 @@ export const ButtonInfoPassword = ({ id }: Props) => {
                           </div>
                         </div>
                       </div>
-                      {/* información principal */}
-                      <div className="relative  px-4 sm:px-6  space-y-1 mt-5">
-                        <div>
-                          <div className="px-4 sm:px-0">
-                            <h3
-                              className={classNames(
-                                darkMode ? "text-titleDark" : "text-gray-900",
-                                "text-lg font-semibold leading-7 "
-                              )}
-                            >
-                              Información principal
-                            </h3>
-                          </div>
-                          <div className="border-t border-gray-100">
-                            <dl className="py-2 space-y-5">
-                              <div className="px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-                                <dt
+                      {isLoading ? (
+                        <Loading />
+                      ) : (
+                        <>
+                          {/* información principal */}
+                          <div className="relative  px-4 sm:px-6  space-y-1 mt-5">
+                            <div>
+                              <div className="px-4 sm:px-0">
+                                <h3
                                   className={classNames(
                                     darkMode
                                       ? "text-titleDark"
                                       : "text-gray-900",
-                                    "text-sm font-medium leading-6 "
+                                    "text-lg font-semibold leading-7 "
                                   )}
                                 >
-                                  Usuario
-                                </dt>
-                                <dd
-                                  className={classNames(
-                                    darkMode
-                                      ? "text-textDark"
-                                      : "text-gray-700",
-                                    "mt-1 text-sm leading-6  sm:col-span-2 sm:mt-0"
-                                  )}
-                                >
-                                  Margot Foster
-                                </dd>
+                                  Información principal
+                                </h3>
                               </div>
-                              <div className="px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-                                <dt
+                              <div className="border-t border-gray-100">
+                                <dl className="py-2 space-y-5">
+                                  <div className="px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                                    <dt
+                                      className={classNames(
+                                        darkMode
+                                          ? "text-titleDark"
+                                          : "text-gray-900",
+                                        "text-sm font-medium leading-6 "
+                                      )}
+                                    >
+                                      Usuario
+                                    </dt>
+                                    <dd
+                                      className={classNames(
+                                        darkMode
+                                          ? "text-textDark"
+                                          : "text-gray-700",
+                                        "mt-1 text-sm leading-6  sm:col-span-2 sm:mt-0"
+                                      )}
+                                    >
+                                      Margot Foster
+                                    </dd>
+                                  </div>
+                                  <div className="px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                                    <dt
+                                      className={classNames(
+                                        darkMode
+                                          ? "text-titleDark"
+                                          : "text-gray-900",
+                                        "text-sm font-medium leading-6 "
+                                      )}
+                                    >
+                                      Contraseña
+                                    </dt>
+                                    <dd
+                                      className={classNames(
+                                        darkMode
+                                          ? "text-textDark"
+                                          : "text-gray-700",
+                                        "mt-1 text-sm leading-6  sm:col-span-2 sm:mt-0"
+                                      )}
+                                    >
+                                      Backend Developer
+                                    </dd>
+                                  </div>
+                                </dl>
+                              </div>
+                            </div>
+                          </div>
+                          {/* Descripción */}
+                          <div className="relative  px-4 sm:px-6  space-y-1 mt-5">
+                            <div>
+                              <div className="px-4 sm:px-0 ">
+                                <h3
                                   className={classNames(
                                     darkMode
                                       ? "text-titleDark"
                                       : "text-gray-900",
-                                    "text-sm font-medium leading-6 "
+                                    "text-lg font-semibold leading-7 "
                                   )}
                                 >
-                                  Contraseña
-                                </dt>
-                                <dd
-                                  className={classNames(
-                                    darkMode
-                                      ? "text-textDark"
-                                      : "text-gray-700",
-                                    "mt-1 text-sm leading-6  sm:col-span-2 sm:mt-0"
-                                  )}
-                                >
-                                  Backend Developer
-                                </dd>
+                                  Descripción
+                                </h3>
                               </div>
-                            </dl>
+                              <div
+                                className={classNames(
+                                  darkMode ? "text-textDark" : "text-gray-700",
+                                  "border-t border-gray-100 py-3"
+                                )}
+                              >
+                                Lorem ipsum dolor sit amet consectetur
+                                adipisicing elit. Dignissimos eveniet nesciunt
+                                blanditiis similique earum temporibus aspernatur
+                                quibusdam, voluptas, molestiae at et quasi
+                                rerum, nostrum tenetur quos eaque ipsam
+                                laboriosam iste!
+                              </div>
+                            </div>
                           </div>
-                        </div>
-                      </div>
-                      {/* Descripción */}
-                      <div className="relative  px-4 sm:px-6  space-y-1 mt-5">
-                        <div>
-                          <div className="px-4 sm:px-0 ">
-                          <h3
-                              className={classNames(
-                                darkMode ? "text-titleDark" : "text-gray-900",
-                                "text-lg font-semibold leading-7 "
-                              )}
-                            >
-                              Descripción
-                            </h3>
-                          </div>
-                          <div 
-                          className={classNames(
-                            darkMode
-                              ? "text-textDark"
-                              : "text-gray-700",
-                              "border-t border-gray-100 py-3"
-                          )}
-                          >
-                            Lorem ipsum dolor sit amet consectetur adipisicing
-                            elit. Dignissimos eveniet nesciunt blanditiis
-                            similique earum temporibus aspernatur quibusdam,
-                            voluptas, molestiae at et quasi rerum, nostrum
-                            tenetur quos eaque ipsam laboriosam iste!
-                          </div>
-                        </div>
-                      </div>
-                      {/* información adicional */}
-                      <div className="relative  px-4 sm:px-6  space-y-1 mt-5">
-                        <div>
-                          <div className="px-4 sm:px-0">
-                          <h3
-                              className={classNames(
-                                darkMode ? "text-titleDark" : "text-gray-900",
-                                "text-lg font-semibold leading-7 "
-                              )}
-                            >
-                              Información adicional
-                            </h3>
-                          </div>
-                          <div className="border-t border-gray-100">
-                            <dl className="py-2">
-                              <div className="px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-                                <dt
+                          {/* información adicional */}
+                          <div className="relative  px-4 sm:px-6  space-y-1 mt-5">
+                            <div>
+                              <div className="px-4 sm:px-0">
+                                <h3
                                   className={classNames(
                                     darkMode
                                       ? "text-titleDark"
                                       : "text-gray-900",
-                                    "text-sm font-medium leading-6 "
+                                    "text-lg font-semibold leading-7 "
                                   )}
                                 >
-                                  Usuario
-                                </dt>
-                                <dd
-                                  className={classNames(
-                                    darkMode
-                                      ? "text-textDark"
-                                      : "text-gray-700",
-                                    "mt-1 text-sm leading-6  sm:col-span-2 sm:mt-0"
-                                  )}
-                                >
-                                  Margot Foster
-                                </dd>
+                                  Información adicional
+                                </h3>
                               </div>
-                              <div className="px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-                                <dt
-                                  className={classNames(
-                                    darkMode
-                                      ? "text-titleDark"
-                                      : "text-gray-900",
-                                    "text-sm font-medium leading-6 "
-                                  )}
-                                >
-                                  Usuario
-                                </dt>
-                                <dd
-                                  className={classNames(
-                                    darkMode
-                                      ? "text-textDark"
-                                      : "text-gray-700",
-                                    "mt-1 text-sm leading-6  sm:col-span-2 sm:mt-0"
-                                  )}
-                                >
-                                  Margot Foster
-                                </dd>
+                              <div className="border-t border-gray-100">
+                                <dl className="py-2">
+                                  <div className="px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                                    <dt
+                                      className={classNames(
+                                        darkMode
+                                          ? "text-titleDark"
+                                          : "text-gray-900",
+                                        "text-sm font-medium leading-6 "
+                                      )}
+                                    >
+                                      Usuario
+                                    </dt>
+                                    <dd
+                                      className={classNames(
+                                        darkMode
+                                          ? "text-textDark"
+                                          : "text-gray-700",
+                                        "mt-1 text-sm leading-6  sm:col-span-2 sm:mt-0"
+                                      )}
+                                    >
+                                      Margot Foster
+                                    </dd>
+                                  </div>
+                                  <div className="px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                                    <dt
+                                      className={classNames(
+                                        darkMode
+                                          ? "text-titleDark"
+                                          : "text-gray-900",
+                                        "text-sm font-medium leading-6 "
+                                      )}
+                                    >
+                                      Usuario
+                                    </dt>
+                                    <dd
+                                      className={classNames(
+                                        darkMode
+                                          ? "text-textDark"
+                                          : "text-gray-700",
+                                        "mt-1 text-sm leading-6  sm:col-span-2 sm:mt-0"
+                                      )}
+                                    >
+                                      Margot Foster
+                                    </dd>
+                                  </div>
+                                </dl>
                               </div>
-                              
-                            </dl>
+                            </div>
                           </div>
-                        </div>
-                      </div>
 
-                      <div className="flex justify-end px-4 mt-1">
-                        <Button color="warning" className="text-white" onClick={handleNavigate}>
-                          Editar
-                        </Button>
-                      </div>
+                          <div className="flex justify-end px-4 mt-1">
+                            <Button
+                              color="warning"
+                              className="text-white"
+                              onClick={handleNavigate}
+                            >
+                              Editar
+                            </Button>
+                          </div>
+                        </>
+                      )}
                     </div>
                   </Dialog.Panel>
                 </Transition.Child>

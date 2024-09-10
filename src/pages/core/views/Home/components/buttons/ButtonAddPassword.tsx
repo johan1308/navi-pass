@@ -6,10 +6,13 @@ import { Button } from "@nextui-org/react";
 import { useThemeMovilPay } from "../../../../../../hooks/useTheme";
 import { classNames } from "../../../../../../helpers/ClassN";
 import { FormAddPass } from "../FormAddPass";
+import { useAllParams } from "../../../../../../hooks/useAllParams";
 
 export const ButtonAddPassword = () => {
   const { darkMode } = useThemeMovilPay();
   const [open, setOpen] = useState(false);
+
+
   return (
     <>
       <Button
@@ -80,7 +83,7 @@ export const ButtonAddPassword = () => {
                         </div>
                       </div>
                       <div className="relative flex-1 px-4 sm:px-6 divide-y-1 space-y-5">
-                        <FormAddPass/>
+                        <FormAddPass setOpen={setOpen}/>
                       </div>
                     </div>
                   </Dialog.Panel>

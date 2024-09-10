@@ -17,7 +17,7 @@ export const AuthContext = createContext<AuthContextInterface>({
 });
 
 export const AuthProviders = ({ children }: Props) => {
-  const [token, setToken] = useState<string | boolean>(false);
+  const [token, setToken] = useState<string | boolean>(true);
   useEffect(() => {
     const to = getCookie("token");
     if (to) {

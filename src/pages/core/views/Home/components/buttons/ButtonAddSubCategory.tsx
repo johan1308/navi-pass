@@ -1,6 +1,3 @@
-import { HiPlusSm } from "react-icons/hi";
-import { useThemeMovilPay } from "../../../../../../../hooks/useTheme";
-import * as yup from "yup";
 import {
   Modal,
   ModalContent,
@@ -9,19 +6,19 @@ import {
   ModalFooter,
   Button,
   useDisclosure,
+  Tooltip,
   Input,
 } from "@nextui-org/react";
+import { BiPlus } from "react-icons/bi";
+import { classNames } from "../../../../../../helpers/ClassN";
+import { postSubCategoriesSetting } from "../../../setting/apis/categoriesSettingApi";
+import { useMutation } from "react-query";
+import { useThemeMovilPay } from "../../../../../../hooks/useTheme";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { BiPlus } from "react-icons/bi";
-import { classNames } from "../../../../../../../helpers/ClassN";
-import { useMutation } from "react-query";
-import { postCategoriesSetting } from "../../../apis/categoriesSettingApi";
-import {
-  ErrorToast,
-  SuccessToast,
-} from "../../../../../../../libs/Notifications";
-import { queryClient } from "../../../../../../../App";
+import { ErrorToast, SuccessToast } from "../../../../../../libs/Notifications";
+import { queryClient } from "../../../../../../App";
+import * as yup from "yup";
 
 const schema = yup
   .object({
@@ -29,10 +26,14 @@ const schema = yup
   })
   .required();
 
-export const ButtonAddCategories = () => {
+export const ButtonAddSubCategory = ({
+  category_id,
+}: {
+  category_id: number;
+}) => {
   const { darkMode } = useThemeMovilPay();
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
-  const mutation = useMutation(postCategoriesSetting);
+  const mutation = useMutation(postSubCategoriesSetting);
 
   const {
     register,
@@ -45,13 +46,17 @@ export const ButtonAddCategories = () => {
   });
 
   const onSubmit = (data: { name: string }) => {
-    mutation.mutateAsync(data, {
+    const body = {
+      ...data,
+      category_id,
+    };
+    mutation.mutateAsync(body, {
       onSuccess: ({ data }: any) => {
         const { message } = data;
         SuccessToast(message);
         reset();
         onOpenChange();
-        queryClient.invalidateQueries("categories");
+        queryClient.invalidateQueries("sub_categories");
       },
       onError: (data: any) => {
         if (data.status == 400) {
@@ -63,13 +68,11 @@ export const ButtonAddCategories = () => {
 
   return (
     <>
-      <Button
-        color="primary"
-        endContent={<HiPlusSm className="h-5 w-5" />}
-        onClick={onOpen}
-      >
-        Crear
-      </Button>
+      <Tooltip content="Agregar Sub categoría">
+        <button onClick={onOpen}>
+          <BiPlus className="h-5 w-5 text-secondary dark:text-white" />
+        </button>
+      </Tooltip>
       <Modal
         isOpen={isOpen}
         onOpenChange={(e) => {

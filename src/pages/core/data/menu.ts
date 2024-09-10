@@ -3,7 +3,7 @@ import { FcLock, FcSettings, FcTodoList } from "react-icons/fc";
 export const navigation = [
   {
     name: "Contraseñas",
-    path: "password",
+    path: "credentials/",
     icon: FcLock,
     show: true,
     children: false,

@@ -7,18 +7,23 @@ import { TablePassword } from "./components/tables/TablePassword";
 import { FormSearchCategory } from "./components/FormSearchCategory";
 import { useAllParams } from "../../../../hooks/useAllParams";
 import { CiViewList } from "react-icons/ci";
+import { create } from "zustand";
 
+export const useHomeStore = create<any>((set:any) => ({
+  category: false,
+  subcategory: false,
+  setCategories: (payload: any) => set({ category: payload }),
+  setSubCategories: (payload: any) => set({ category: payload }),
+}));
 
 const HomeCore = () => {
   const {
-    params: { data },
+    params: { sub_category },
   } = useAllParams();
-
 
   const handleSearch = (e: any) => {
     console.log(e);
   };
-
 
   return (
     <div className="grid lg:grid-cols-5  sm:grid-cols-1 gap-4 divide-x-2 divide-gray-200 dark:divide-secondaryDark">
@@ -26,7 +31,7 @@ const HomeCore = () => {
         <FormSearchCategory />
       </div>
       <div className="lg:col-span-4 sm:col-span-full">
-        {data ? (
+        {sub_category ? (
           <TemplateTableLayout
             title="Información de las contraseñas"
             bottons={

@@ -1,44 +1,59 @@
-import {
-  Table,
-  TableHeader,
-  TableColumn,
-  TableBody,
-  TableRow,
-  TableCell,
-} from "@nextui-org/react";
+import { PagintorSettingCategories } from "./PagintorSettingCategories";
+import { useAllParams } from "../../../../../../../hooks/useAllParams";
+import { useSettingCategoriesStore } from "../../SettingCategories";
+import { useQuery } from "react-query";
+import { getCategoriesSetting } from "../../../apis/categoriesSettingApi";
+import { TableLayout } from "../../../../../layout/TableLayout";
+import { Button, Tooltip } from "@nextui-org/react";
+import { BiSolidEdit } from "react-icons/bi";
+import { ButtonDeleteCategories } from "../buttons/ButtonDeleteCategories";
+import { ButtonEditCategories } from "../buttons/ButtonEditCategories";
+
+const dataTable: any[] = [
+  { name: "ID", value: "id" },
+  {
+    name: "Nombre",
+    value: (e: any) => {
+      return (
+        <div className="flex items-centers">
+          <span className="text-md">{e.name}</span>
+          <ButtonEditCategories id={e.id} name={e.name} />
+        </div>
+      );
+    },
+  },
+  {
+    name: "Acción",
+    value: (e: any) => <ButtonDeleteCategories id={e.id} />,
+  },
+];
 
 export const TableSettingCategories = () => {
+  const { params } = useAllParams();
+  const {
+    setData,
+    data: { data },
+  } = useSettingCategoriesStore();
+  const { isLoading, isSuccess } = useQuery(
+    ["categories", params],
+    () => getCategoriesSetting(params),
+    {
+      onSuccess: (e: any) => {
+
+        setData(e);
+      },
+      refetchOnWindowFocus: false,
+    }
+  );
+
   return (
     <>
-      <Table aria-label="Example static collection table" removeWrapper>
-        <TableHeader>
-          <TableColumn>ID</TableColumn>
-          <TableColumn>NOMBRE</TableColumn>
-          <TableColumn>ACCIÓN</TableColumn>
-        </TableHeader>
-        <TableBody >
-          <TableRow key="1" className="dark:text-textDark">
-            <TableCell>Tony Reichert</TableCell>
-            <TableCell>CEO</TableCell>
-            <TableCell>Active</TableCell>
-          </TableRow>
-          <TableRow key="2" className="dark:text-textDark">
-            <TableCell>Zoey Lang</TableCell>
-            <TableCell>Technical Lead</TableCell>
-            <TableCell>Paused</TableCell>
-          </TableRow>
-          <TableRow key="3" className="dark:text-textDark">
-            <TableCell>Jane Fisher</TableCell>
-            <TableCell>Senior Developer</TableCell>
-            <TableCell>Active</TableCell>
-          </TableRow>
-          <TableRow key="4" className="dark:text-textDark">
-            <TableCell>William Howard</TableCell>
-            <TableCell>Community Manager</TableCell>
-            <TableCell>Vacation</TableCell>
-          </TableRow>
-        </TableBody>
-      </Table>
+      <TableLayout
+        isLoading={isLoading}
+        data={data ?? []}
+        columns={dataTable}
+        Paginator={isSuccess && <PagintorSettingCategories />}
+      />
     </>
   );
 };

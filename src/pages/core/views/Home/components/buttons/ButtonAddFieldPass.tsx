@@ -23,7 +23,7 @@ interface Props {
 const schema = yup
   .object({
     title: yup.string().required("Debes introducir el titulo"),
-    value: yup.string().required("Debes introducir el titulo"),
+    values: yup.string().required("Debes introducir el titulo"),
   })
   .required();
 
@@ -112,7 +112,7 @@ export const ButtonAddFieldPass = ({ send }: Props) => {
                 />
                 <Controller
                   control={control}
-                  name="value"
+                  name="values"
                   render={({ field: { onChange, onBlur, value } }) => (
                     <>
                       <Textarea

@@ -22,15 +22,15 @@ export const CoreRouters = () => {
             {/* {getTitle} */}
             {/* <BreadCrumbCore /> */}
             <Routes>
-              <Route path="/" element={<Navigate to="password/" />} />
-              <Route path="password/" element={<Home />} />
-              <Route path="password/:id/update/" element={<PassIDViews />} />
+              <Route path="/" element={<Navigate to="credentials/" />} />
+              <Route path="credentials/" element={<Home />} />
+              <Route path="credentials/:id/update/" element={<PassIDViews />} />
               <Route path="setting/" element={<Setting />}>
                 <Route index element={<Navigate to="/categories" />} />
                 <Route path="categories" element={<SettingCategories />} />
                 <Route path="*" element={<Navigate to="/categories" />} />
               </Route>
-              <Route path="*" element={<Navigate to="/password" />} />
+              <Route path="*" element={<Navigate to="/credentials" />} />
             </Routes>
           </>
         </Suspense>
