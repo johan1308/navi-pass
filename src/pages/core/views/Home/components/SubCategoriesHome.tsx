@@ -18,12 +18,14 @@ export const SubCategoriesHome = ({ category_id }: { category_id: number }) => {
   const [subCategories, setSubcategories] = useState([]);
   const queryParams = { category_id, remove_pagination: true };
 
-  const { isLoading } = useQuery(
+  const { isLoading,isSuccess } = useQuery(
     ["sub_categories", category_id],
     () => getSubCategories(queryParams),
     {
       enabled: !!queryParams, // Asegúrate de que la consulta solo se ejecute si `category.id` existe
       onSuccess: ({ data }) => {
+        console.log(data);
+        
         setSubcategories(data.data);
       },
       refetchOnWindowFocus: false, // Puedes ajustarlo a true si quieres que se vuelva a hacer la petición al cambiar de ventana
@@ -53,6 +55,7 @@ export const SubCategoriesHome = ({ category_id }: { category_id: number }) => {
         ) : subCategories.length == 0 ? (
           <NotSubCategory />
         ) : (
+          isSuccess&&
           subCategories.map((d: any) => (
             <ItemsSearchCategory key={d.id} id={d.id} name={d.name} />
           ))
@@ -122,11 +125,11 @@ const NotSubCategory = () => {
         Para empezar tendrás que crear una sub-categoría
       </p>
       <div className="mt-6">
-        <Tooltip content="Crear Sub-categoría">
+        {/* <Tooltip content="Crear Sub-categoría">
           <Button color="primary" endContent={<BiPlus className="h-5 w-5" />}>
             Crear
           </Button>
-        </Tooltip>
+        </Tooltip> */}
       </div>
     </div>
   );

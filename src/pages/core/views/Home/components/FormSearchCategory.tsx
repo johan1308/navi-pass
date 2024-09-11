@@ -1,18 +1,18 @@
 import { Select, SelectItem } from "@nextui-org/react";
 import { useQuery } from "react-query";
 import { getCategoriesSetting } from "../../setting/apis/categoriesSettingApi";
-import { useEffect, useState } from "react";
-import { useHomeStore } from "../HomeCore";
+import { useState } from "react";
 import { SubCategoriesHome } from "./SubCategoriesHome";
 import { useAllParams } from "../../../../../hooks/useAllParams";
 import { MdChecklist } from "react-icons/md";
+
 
 const paramsQuery = {
   remove_pagination: true,
 };
 
 export const FormSearchCategory = () => {
-  const { setCategories, category } = useHomeStore();
+  
   const {
     setSearchParams,
     params: { category_id },
@@ -30,7 +30,7 @@ export const FormSearchCategory = () => {
         setCategorieHome(items.data);
         setSelectedCategory(category_id)
         if (category_id) {
-          setCategories(category_id);
+          setSelectedCategory(category_id);
         }
       },
       refetchOnWindowFocus: false,
@@ -40,12 +40,12 @@ export const FormSearchCategory = () => {
   );
 
   const handleCategorySelected = ({ target: { value } }: any) => {
-    setSearchParams({ category_id: value });
+    setSelectedCategory(value)
     if (!value) {
-      setSearchParams({});
+      return setSearchParams({});
     }
-    const categoryID = categoriesHome.find((d: any) => d.id == value);
-    setCategories(categoryID);
+    setSearchParams({ category_id: value });
+    // const categoryID = categoriesHome.find((d: any) => d.id == value);
   };
   
   
@@ -70,7 +70,7 @@ export const FormSearchCategory = () => {
           ))}
         </Select>
       </div>
-      {category ? (
+      {selectedCategory ? (
         <SubCategoriesHome category_id={Number(category_id)} />
       ) : (
         <NotCategory />
