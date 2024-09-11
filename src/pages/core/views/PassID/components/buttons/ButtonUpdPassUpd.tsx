@@ -1,4 +1,4 @@
-import { BiPlus } from "react-icons/bi";
+import { BiPencil } from "react-icons/bi";
 import * as yup from "yup";
 import {
   Modal,
@@ -12,20 +12,19 @@ import {
   Textarea,
   Tooltip,
 } from "@nextui-org/react";
-import { dataInput } from "../../../Home/components/FormAddPass";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
-import { useParams } from "react-router-dom";
 import { queryClient } from "../../../../../../App";
 import { useMutation } from "react-query";
-import { postAdditionalInformation } from "../../../Home/api/HomeAPi";
+import { patchAdditionalInformation } from "../../../Home/api/HomeAPi";
 import { ErrorToast, SuccessToast } from "../../../../../../libs/Notifications";
 import { useThemeMovilPay } from "../../../../../../hooks/useTheme";
 import { classNames } from "../../../../../../helpers/ClassN";
-
+import { AdditionalInformation } from "../../../Home/interfaces/CredentialsInterfaces";
+import { useEffect } from "react";
 
 interface Props {
-  send: (e: dataInput) => void;
+  additionalInformation: AdditionalInformation;
 }
 
 const schema = yup
@@ -34,49 +33,54 @@ const schema = yup
     values: yup.string().required("* Debes introducir el valor *"),
   })
   .required();
-
-export const ButtonAddPassUpd = ({ send }: Props) => {
+export const ButtonUpdPassUpd = ({ additionalInformation }: Props) => {
   const { darkMode } = useThemeMovilPay();
-  const { id } = useParams();
   const { isOpen, onOpen, onOpenChange, onClose: closeModal } = useDisclosure();
-  const mutation = useMutation(postAdditionalInformation);
+  const mutation = useMutation(({ id, body }: any) =>
+    patchAdditionalInformation(id, body)
+  );
   const {
     register,
     formState: { errors, isValid },
     reset,
     handleSubmit,
-  } = useForm({ resolver: yupResolver(schema) });
+    setValue,
+  } = useForm({
+    resolver: yupResolver(schema),
+  });
 
-  const onSubmit = (data: any) => {
-    const body = {
-      ...data,
-      credential_id: id,
-    };
-
-    mutation.mutate(body, {
-      onSuccess: ({ data }) => {
-        SuccessToast(data.message);
-        queryClient.invalidateQueries("credential");
-        reset();
-        closeModal();
+  const onSubmit = (body: any) => {
+    mutation.mutate(
+      {
+        id: additionalInformation.id,
+        body,
       },
-      onError: ({ response }: any, variables, context) => {
-        // An error happened!
-        ErrorToast(response.data.message);
-      },
-    });
+      {
+        onSuccess: ({ data }) => {
+          SuccessToast(data.message);
+          queryClient.invalidateQueries("credential");
+          reset();
+          closeModal();
+        },
+        onError: ({ response }: any, variables, context) => {
+          // An error happened!
+          ErrorToast(response.data.message);
+        },
+      }
+    );
   };
+
+  useEffect(() => {
+    setValue("title", additionalInformation.title);
+    setValue("values", additionalInformation.values);
+  }, [additionalInformation]);
 
   return (
     <div>
       <Tooltip content="Agregar Información">
-        <button
-          type="button"
-          onClick={onOpen}
-          className="bg-transparent font-medium border-secondary dark:border-titleDark border-2 border-dashed p-2 rounded-full"
-        >
-          <BiPlus className="h-4 w-4 text-secondary dark:text-titleDark" />
-        </button>
+        <Button isIconOnly className="rounded-xl text-warning" onClick={onOpen}>
+          <BiPencil className="h-5 w-5" />
+        </Button>
       </Tooltip>
       <Modal
         isOpen={isOpen}
@@ -122,7 +126,7 @@ export const ButtonAddPassUpd = ({ send }: Props) => {
                       {...register("values")}
                     />
                     <p className="text-xs text-danger">
-                      {errors.title?.message}
+                      {errors.values?.message}
                     </p>
                   </div>
                   <div className="flex justify-end my-3 space-x-3">

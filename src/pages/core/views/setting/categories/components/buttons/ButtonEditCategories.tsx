@@ -70,7 +70,7 @@ export const ButtonEditCategories = ({
           SuccessToast(message);
           reset();
           setIsOpen(false);
-          queryClient.invalidateQueries("categories");
+          queryClient.invalidateQueries("credential");
         },
         onError: (data: any, variables, context) => {
           if (data.status == 400) {

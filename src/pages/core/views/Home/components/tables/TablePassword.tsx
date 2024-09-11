@@ -45,7 +45,7 @@ export const TablePassword = () => {
         isLoading={isLoading}
         data={credentials ?? []}
         columns={dataTable}
-        Paginator={isSuccess && <PaginatorPassword data={paginate}/>}
+        Paginator={paginate.length > 0 && <PaginatorPassword data={paginate}/>}
       />
     </div>
   );

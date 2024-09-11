@@ -1,7 +1,7 @@
 import { Select, SelectItem } from "@nextui-org/react";
 import { useQuery } from "react-query";
 import { getCategoriesSetting } from "../../setting/apis/categoriesSettingApi";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useHomeStore } from "../HomeCore";
 import { SubCategoriesHome } from "./SubCategoriesHome";
 import { useAllParams } from "../../../../../hooks/useAllParams";
@@ -13,18 +13,29 @@ const paramsQuery = {
 
 export const FormSearchCategory = () => {
   const { setCategories, category } = useHomeStore();
-  const { setSearchParams } = useAllParams();
+  const {
+    setSearchParams,
+    params: { category_id },
+  } = useAllParams();
+
   const [categoriesHome, setCategorieHome] = useState<any>([]);
+  const [selectedCategory, setSelectedCategory] = useState<any>(undefined);
   useQuery(
     ["categories", paramsQuery],
     () => getCategoriesSetting(paramsQuery),
     {
       onSuccess: (items) => {
+        console.log(items.data);
+        
         setCategorieHome(items.data);
+        setSelectedCategory(category_id)
+        if (category_id) {
+          setCategories(category_id);
+        }
       },
       refetchOnWindowFocus: false,
       staleTime: 0, // Los datos siempre están "stale", forzando una nueva petición
-      cacheTime: 0, // Los datos no se almacenan en caché
+      // cacheTime: 0, // Los datos no se almacenan en caché
     }
   );
 
@@ -36,6 +47,8 @@ export const FormSearchCategory = () => {
     const categoryID = categoriesHome.find((d: any) => d.id == value);
     setCategories(categoryID);
   };
+  
+  
 
   return (
     <>
@@ -45,6 +58,7 @@ export const FormSearchCategory = () => {
           className="max-w-xs "
           placeholder="Selecciona la categoría"
           onChange={handleCategorySelected}
+          selectedKeys={selectedCategory}
         >
           {categoriesHome.map((category: any) => (
             <SelectItem
@@ -56,7 +70,11 @@ export const FormSearchCategory = () => {
           ))}
         </Select>
       </div>
-      {category ? <SubCategoriesHome /> : <NotCategory />}
+      {category ? (
+        <SubCategoriesHome category_id={Number(category_id)} />
+      ) : (
+        <NotCategory />
+      )}
     </>
   );
 };

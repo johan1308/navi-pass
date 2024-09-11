@@ -9,15 +9,32 @@ import { HiX } from "react-icons/hi";
 import { useQuery } from "react-query";
 import { getCredentialsID } from "../../api/HomeAPi";
 import { Loading } from "../../../../../../components/Loading";
+import { Credentials } from "../../interfaces/CredentialsInterfaces";
+import { useAllParams } from "../../../../../../hooks/useAllParams";
+import { setCookie } from "../../../../../../config/cookies";
 
 interface Props {
   id: number;
 }
 
+const initialState: Credentials = {
+  id: 0,
+  user: "",
+  password: "",
+  description: "",
+  sub_category_id: 0,
+  created_at: "",
+  updated_at: "",
+  additional_information: [],
+};
+
 export const ButtonInfoPassword = ({ id }: Props) => {
   const navigation = useNavigate();
-  const handleNavigate = () => {
-    const url = `${id}/update/`;
+  const { params } = useAllParams();
+  const [infoCredentials, setInfoCredentials] = useState(initialState);
+  const handleNavigate = (idCredential: number) => {
+    const url = `${idCredential}/update/`;
+    setCookie('last_path_info',JSON.stringify(params))
     navigation(url);
   };
 
@@ -28,8 +45,10 @@ export const ButtonInfoPassword = ({ id }: Props) => {
     () => getCredentialsID(id),
     {
       enabled: open,
-      onSuccess: (data) => {
-        console.log(data);
+      refetchOnWindowFocus: false,
+      onSuccess: ({ data }) => {
+        const { data: info } = data;
+        setInfoCredentials(info);
       },
     }
   );
@@ -146,7 +165,7 @@ export const ButtonInfoPassword = ({ id }: Props) => {
                                         "mt-1 text-sm leading-6  sm:col-span-2 sm:mt-0"
                                       )}
                                     >
-                                      Margot Foster
+                                      {infoCredentials.user}
                                     </dd>
                                   </div>
                                   <div className="px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
@@ -168,7 +187,7 @@ export const ButtonInfoPassword = ({ id }: Props) => {
                                         "mt-1 text-sm leading-6  sm:col-span-2 sm:mt-0"
                                       )}
                                     >
-                                      Backend Developer
+                                      {infoCredentials.password}
                                     </dd>
                                   </div>
                                 </dl>
@@ -196,12 +215,11 @@ export const ButtonInfoPassword = ({ id }: Props) => {
                                   "border-t border-gray-100 py-3"
                                 )}
                               >
-                                Lorem ipsum dolor sit amet consectetur
-                                adipisicing elit. Dignissimos eveniet nesciunt
-                                blanditiis similique earum temporibus aspernatur
-                                quibusdam, voluptas, molestiae at et quasi
-                                rerum, nostrum tenetur quos eaque ipsam
-                                laboriosam iste!
+                                {infoCredentials.description ?? (
+                                  <span className="text-gray-400">
+                                    No posee descripción
+                                  </span>
+                                )}
                               </div>
                             </div>
                           </div>
@@ -222,50 +240,40 @@ export const ButtonInfoPassword = ({ id }: Props) => {
                               </div>
                               <div className="border-t border-gray-100">
                                 <dl className="py-2">
-                                  <div className="px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-                                    <dt
-                                      className={classNames(
-                                        darkMode
-                                          ? "text-titleDark"
-                                          : "text-gray-900",
-                                        "text-sm font-medium leading-6 "
-                                      )}
-                                    >
-                                      Usuario
-                                    </dt>
-                                    <dd
-                                      className={classNames(
-                                        darkMode
-                                          ? "text-textDark"
-                                          : "text-gray-700",
-                                        "mt-1 text-sm leading-6  sm:col-span-2 sm:mt-0"
-                                      )}
-                                    >
-                                      Margot Foster
-                                    </dd>
-                                  </div>
-                                  <div className="px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-                                    <dt
-                                      className={classNames(
-                                        darkMode
-                                          ? "text-titleDark"
-                                          : "text-gray-900",
-                                        "text-sm font-medium leading-6 "
-                                      )}
-                                    >
-                                      Usuario
-                                    </dt>
-                                    <dd
-                                      className={classNames(
-                                        darkMode
-                                          ? "text-textDark"
-                                          : "text-gray-700",
-                                        "mt-1 text-sm leading-6  sm:col-span-2 sm:mt-0"
-                                      )}
-                                    >
-                                      Margot Foster
-                                    </dd>
-                                  </div>
+                                  {infoCredentials.additional_information
+                                    .length == 0 ? (
+                                    <InformationAdditionalEmpty />
+                                  ) : (
+                                    infoCredentials.additional_information.map(
+                                      (d) => (
+                                        <div
+                                          className="px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0"
+                                          key={d.id}
+                                        >
+                                          <dt
+                                            className={classNames(
+                                              darkMode
+                                                ? "text-titleDark"
+                                                : "text-gray-900",
+                                              "text-sm font-medium leading-6 "
+                                            )}
+                                          >
+                                            {d.title}
+                                          </dt>
+                                          <dd
+                                            className={classNames(
+                                              darkMode
+                                                ? "text-textDark"
+                                                : "text-gray-700",
+                                              "mt-1 text-sm leading-6  sm:col-span-2 sm:mt-0"
+                                            )}
+                                          >
+                                            {d.values}
+                                          </dd>
+                                        </div>
+                                      )
+                                    )
+                                  )}
                                 </dl>
                               </div>
                             </div>
@@ -275,7 +283,7 @@ export const ButtonInfoPassword = ({ id }: Props) => {
                             <Button
                               color="warning"
                               className="text-white"
-                              onClick={handleNavigate}
+                              onClick={() => handleNavigate(infoCredentials.id)}
                             >
                               Editar
                             </Button>
@@ -292,4 +300,8 @@ export const ButtonInfoPassword = ({ id }: Props) => {
       </Transition.Root>
     </>
   );
+};
+
+export const InformationAdditionalEmpty = () => {
+  return <div>No hay información registrada</div>;
 };

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useAllParams } from "../../../../../hooks/useAllParams";
 import { TbSitemap } from "react-icons/tb";
 import { Button, Tooltip } from "@nextui-org/react";
@@ -12,16 +12,14 @@ import { ButtonAddSubCategory } from "./buttons/ButtonAddSubCategory";
 import { ButtonDeleteSubCategory } from "./buttons/ButtonDeleteSubCategory";
 import { classNames } from "../../../../../helpers/ClassN";
 import { configTaiwind } from "../../../../../utils/configTaiwind";
+import { queryClient } from "../../../../../App";
 
-export const SubCategoriesHome = () => {
+export const SubCategoriesHome = ({ category_id }: { category_id: number }) => {
   const [subCategories, setSubcategories] = useState([]);
-  const { category } = useHomeStore();
-  const queryParams = category?.id
-    ? { category_id: category.id, remove_pagination: true }
-    : null;
+  const queryParams = { category_id, remove_pagination: true };
 
   const { isLoading } = useQuery(
-    ["sub_categories"],
+    ["sub_categories", category_id],
     () => getSubCategories(queryParams),
     {
       enabled: !!queryParams, // Asegúrate de que la consulta solo se ejecute si `category.id` existe
@@ -31,6 +29,9 @@ export const SubCategoriesHome = () => {
       refetchOnWindowFocus: false, // Puedes ajustarlo a true si quieres que se vuelva a hacer la petición al cambiar de ventana
     }
   );
+  // useEffect(() => {
+  //   queryClient.invalidateQueries(["sub_categories", category_id]);
+  // }, [category_id]);
 
   return (
     <div className="py-2 bg-white dark:bg-primaryDark shadow-md rounded-xl p-2">
@@ -38,7 +39,7 @@ export const SubCategoriesHome = () => {
         <span className="dark:text-titleDark font-semibold ">
           Sub categoría
         </span>
-        <ButtonAddSubCategory category_id={category.id} />
+        <ButtonAddSubCategory category_id={category_id} />
       </div>
       <ul
         className={classNames(
