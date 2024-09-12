@@ -66,7 +66,7 @@ export const FormAddPass = ({setOpen}:Props) => {
         SuccessToast(data.message)
       },
       onError: (error, variables, context) => {
-        console.log(error);
+        
       },
     });
   };

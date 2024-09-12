@@ -6,6 +6,7 @@ import { ButtonAddCategories } from "./components/buttons/ButtonAddCategories";
 import { create } from "zustand";
 import { settingCategoriesInterface } from "./interfaces/SettingCategoriesInterfaces";
 import { queryClient } from "../../../../../App";
+import { useAllParams } from "../../../../../hooks/useAllParams";
 
 export const useSettingCategoriesStore = create<settingCategoriesInterface>(
   (set) => ({
@@ -15,7 +16,15 @@ export const useSettingCategoriesStore = create<settingCategoriesInterface>(
   })
 );
 
+
 const SettingCategories = () => {
+  const { setSearchParams,params } = useAllParams();
+  const handleSearch = (data: any) => {
+    if (!data.search) {
+      return setSearchParams({})
+    }
+    setSearchParams(data)
+  };
   return (
     <div className="animate-fade">
       <TemplateTableLayout
@@ -35,7 +44,7 @@ const SettingCategories = () => {
             </Button>
           </div>
         }
-        search={(e) => console.log(e)}
+        search={handleSearch}
       >
         <>
           <TableSettingCategories />

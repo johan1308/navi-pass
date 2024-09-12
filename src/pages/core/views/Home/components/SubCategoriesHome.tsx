@@ -18,22 +18,25 @@ export const SubCategoriesHome = ({ category_id }: { category_id: number }) => {
   const [subCategories, setSubcategories] = useState([]);
   const queryParams = { category_id, remove_pagination: true };
 
-  const { isLoading,isSuccess } = useQuery(
+  const { isLoading, isSuccess ,isFetching} = useQuery(
     ["sub_categories", category_id],
     () => getSubCategories(queryParams),
     {
       enabled: !!queryParams, // Asegúrate de que la consulta solo se ejecute si `category.id` existe
       onSuccess: ({ data }) => {
-        console.log(data);
-        
         setSubcategories(data.data);
       },
       refetchOnWindowFocus: false, // Puedes ajustarlo a true si quieres que se vuelva a hacer la petición al cambiar de ventana
     }
   );
-  // useEffect(() => {
-  //   queryClient.invalidateQueries(["sub_categories", category_id]);
-  // }, [category_id]);
+
+  if (isLoading || isFetching) {
+    return (
+      <div className="flex justify-center items-center lg:mt-20">
+        <Loading />
+      </div>
+    );
+  }
 
   return (
     <div className="py-2 bg-white dark:bg-primaryDark shadow-md rounded-xl p-2">
@@ -50,12 +53,10 @@ export const SubCategoriesHome = ({ category_id }: { category_id: number }) => {
           "space-y-4 font-medium mt-5 max-h-[500px] overflow-y-scroll"
         )}
       >
-        {isLoading ? (
-          <Loading />
-        ) : subCategories.length == 0 ? (
+        {subCategories.length == 0 ? (
           <NotSubCategory />
         ) : (
-          isSuccess&&
+          isSuccess &&
           subCategories.map((d: any) => (
             <ItemsSearchCategory key={d.id} id={d.id} name={d.name} />
           ))

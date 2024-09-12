@@ -41,9 +41,6 @@ export const PassIDViews = () => {
   );
 
   const handleNavigate = () => {
-    const data = JSON.parse(getCookie("last_path_info"));
-    const queryParams = queryString.stringify(data);
-    const url = `credentials?${queryParams}`;
     navigation(-1);
   };
   return (

@@ -25,7 +25,7 @@ export const FormSearchCategory = () => {
     () => getCategoriesSetting(paramsQuery),
     {
       onSuccess: (items) => {
-        console.log(items.data);
+        
         
         setCategorieHome(items.data);
         setSelectedCategory(category_id)

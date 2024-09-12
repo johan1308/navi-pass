@@ -8,8 +8,9 @@ import { FormSearchCategory } from "./components/FormSearchCategory";
 import { useAllParams } from "../../../../hooks/useAllParams";
 import { CiViewList } from "react-icons/ci";
 import { create } from "zustand";
+import { queryClient } from "../../../../App";
 
-export const useHomeStore = create<any>((set:any) => ({
+export const useHomeStore = create<any>((set: any) => ({
   category: false,
   subcategory: false,
   setCategories: (payload: any) => set({ category: payload }),
@@ -17,12 +18,18 @@ export const useHomeStore = create<any>((set:any) => ({
 }));
 
 const HomeCore = () => {
-  const {
-    params: { sub_category },
-  } = useAllParams();
+  const { params, setSearchParams } = useAllParams();
 
   const handleSearch = (e: any) => {
-    console.log(e);
+    if (!e.search) {
+      const { search, ...rest } = params;
+      setSearchParams(rest);
+      return;
+    }
+    setSearchParams({
+      ...params,
+      search: e.search,
+    });
   };
 
   return (
@@ -31,7 +38,7 @@ const HomeCore = () => {
         <FormSearchCategory />
       </div>
       <div className="lg:col-span-4 sm:col-span-full">
-        {sub_category ? (
+        {params.sub_category ? (
           <TemplateTableLayout
             title="Información de las contraseñas"
             bottons={

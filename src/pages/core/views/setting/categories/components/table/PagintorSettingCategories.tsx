@@ -6,13 +6,18 @@ import { classNames } from "../../../../../../../helpers/ClassN";
 
 export const PagintorSettingCategories = () => {
   const { data } = useSettingCategoriesStore();
-  const { setSearchParams } = useAllParams();
+  const { setSearchParams,params } = useAllParams();
   const [previous, ...rest] = data.links;
   const next = rest.pop();
 
-  const handlePage = async (e: any) => {
+  const handlePage = async (e: any) => {  
     const parsed = queryString.parseUrl(e);
-    const { query } = parsed || {};
+    
+    const { query }:any = parsed || {};
+    if (query.page == 1) {
+      const {page ,...rest} = params
+      return setSearchParams(rest);
+    }
     setSearchParams(query as any);
   };
 

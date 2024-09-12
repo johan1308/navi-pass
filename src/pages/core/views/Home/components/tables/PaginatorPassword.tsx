@@ -8,7 +8,7 @@ interface Props {
 
 
 export const PaginatorPassword = ({data}:Props) => {
-    console.log(data);
+    
     const { setSearchParams } = useAllParams();
     const [previous, ...rest] = data;
     const next = rest.pop();
