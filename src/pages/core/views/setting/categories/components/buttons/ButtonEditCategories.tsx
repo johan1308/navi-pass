@@ -36,7 +36,6 @@ export const ButtonEditCategories = ({
   name: string;
 }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const { params } = useAllParams();
   const { darkMode } = useThemeMovilPay();
   const Mutation = useMutation(({ id, body }: any) =>
     patchCategoriesSetting(id, body)
@@ -70,7 +69,7 @@ export const ButtonEditCategories = ({
           SuccessToast(message);
           reset();
           setIsOpen(false);
-          queryClient.invalidateQueries("credential");
+          queryClient.invalidateQueries("categories");
         },
         onError: (data: any, variables, context) => {
           if (data.status == 400) {
@@ -87,19 +86,28 @@ export const ButtonEditCategories = ({
         placement="bottom"
         backdrop="opaque"
         isOpen={isOpen}
-        
         onOpenChange={(open) => setIsOpen(open)}
       >
         <PopoverTrigger>
-          <button>
-            <BiSolidEdit className="h-5 w-5 ml-4 text-warning" />
-          </button>
+          <Button
+            isIconOnly
+            color="warning"
+            className="mx-1 text-white"
+            size="sm"
+          >
+            <BiSolidEdit className="h-5 w-5"/>
+          </Button>
         </PopoverTrigger>
-        <PopoverContent className={classNames(darkMode&&'bg-primaryDark',"w-[240px] ")} >
+        <PopoverContent
+          className={classNames(darkMode && "bg-primaryDark", "w-[240px] ")}
+        >
           {(titleProps) => (
             <div className="px-1 py-2 w-full">
               <p
-                className={classNames(darkMode&&'text-white',"text-small font-bold text-foreground")}
+                className={classNames(
+                  darkMode && "text-white",
+                  "text-small font-bold text-foreground"
+                )}
                 {...titleProps}
               >
                 Editar Nombre categoría

@@ -4,27 +4,39 @@ import { useSettingCategoriesStore } from "../../SettingCategories";
 import { useQuery } from "react-query";
 import { getCategoriesSetting } from "../../../apis/categoriesSettingApi";
 import { TableLayout } from "../../../../../layout/TableLayout";
-import { Button, Tooltip } from "@nextui-org/react";
-import { BiSolidEdit } from "react-icons/bi";
 import { ButtonDeleteCategories } from "../buttons/ButtonDeleteCategories";
 import { ButtonEditCategories } from "../buttons/ButtonEditCategories";
+import { ButtonInfoLength } from "../buttons/ButtonInfoLength";
 
 const dataTable: any[] = [
   { name: "ID", value: "id" },
   {
     name: "Nombre",
+
     value: (e: any) => {
-      return (
-        <div className="flex items-centers">
-          <span className="text-md">{e.name}</span>
-          <ButtonEditCategories id={e.id} name={e.name} />
-        </div>
-      );
+      let long = e.name.length > 20;
+      if (e.name.length > 20) {
+        return (
+          <>
+            {e.name.substring(0, 20) }
+            {long && <ButtonInfoLength data={e.name} />}
+          </>
+        );
+      }
+      return e.name;
     },
   },
   {
     name: "Acción",
-    value: (e: any) => <ButtonDeleteCategories id={e.id} />,
+    value: (e: any) => {
+      let long = e.name.length > 20;
+      return (
+        <div className="flex items-center ">
+          <ButtonEditCategories id={e.id} name={e.name} />
+          <ButtonDeleteCategories id={e.id} />
+        </div>
+      );
+    },
   },
 ];
 
@@ -39,7 +51,6 @@ export const TableSettingCategories = () => {
     () => getCategoriesSetting(params),
     {
       onSuccess: (e: any) => {
-
         setData(e);
       },
       refetchOnWindowFocus: false,
